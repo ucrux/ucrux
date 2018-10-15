@@ -29,12 +29,13 @@ C_INCLUDE_DIR = -I include/ -I kernel/include/ \
 ASM_INCLUDE_DIR	= -I boot/include/ -I lib/kernel/include/ \
                   -I kernel/int_handle/include/ \
                   -I kernel/hdisk/include/
-CFLAGS		= -Wall $(C_INCLUDE_DIR) -c -fno-builtin -W \
+CFLAGS		= -m32 -Wall $(C_INCLUDE_DIR) -c -fno-builtin -W \
             -Wstrict-prototypes \
-            -Wmissing-prototypes
-BOOTLOAD_LDFLAGS = -Ttext $(BOOTLOAD_ENTRYPOINT) -e main
-KERNEL_LDFLAGS	 = -Ttext $(KERNEL_ENTRYPOINT) -e main
-PROC_LDFLAGS = -Ttext $(PROC_ENTRYPOINT) -e main
+            -Wmissing-prototypes \
+            -fno-stack-protector
+BOOTLOAD_LDFLAGS = -m elf_i386 -Ttext $(BOOTLOAD_ENTRYPOINT) -e main
+KERNEL_LDFLAGS	 = -m elf_i386 -Ttext $(KERNEL_ENTRYPOINT) -e main
+PROC_LDFLAGS = -m elf_i386 -Ttext $(PROC_ENTRYPOINT) -e main
 
 
 
@@ -410,17 +411,17 @@ KEYBOARD_BIN = build/keyboard.bin
 # 编译目标文件
 # 汇编
 ${DISP_CHAR_OBJ} : ${DISP_CHAR_SRC_FILE} ${DISP_CHAR_DEP_FILE}
-	${ASM} ${ASM_INCLUDE_DIR} -f elf -o $@ $<
+	${ASM} ${ASM_INCLUDE_DIR} -f elf32 -o $@ $<
 ${ELF_LOAD_OBJ} : ${ELF_LOAD_SRC_FILE} ${ELF_LOAD_DEP_FILE}
-	${ASM} ${ASM_INCLUDE_DIR} -f elf -o $@ $<
+	${ASM} ${ASM_INCLUDE_DIR} -f elf32 -o $@ $<
 ${READKERNEL_OBJ} : ${READKERNEL_SRC_FILE} ${READKERNEL_DEP_FILE}
-	${ASM} ${ASM_INCLUDE_DIR} -f elf -o $@ $<
+	${ASM} ${ASM_INCLUDE_DIR} -f elf32 -o $@ $<
 ${INTR_HANDLE_ASM_OBJ} : ${INTR_HANDLE_ASM_SRC_FILE} ${INTR_HANDLE_ASM_DEP_FILE}
-	${ASM} ${ASM_INCLUDE_DIR} -f elf -o $@ $<
+	${ASM} ${ASM_INCLUDE_DIR} -f elf32 -o $@ $<
 ${SWITCH_OBJ} : ${SWITCH_SRC_FILE}
-	${ASM} ${ASM_INCLUDE_DIR} -f elf -o $@ $<
+	${ASM} ${ASM_INCLUDE_DIR} -f elf32 -o $@ $<
 ${SYSHD_OPT_OBJ} : ${SYSHD_OPT_SRC_FILE} ${SYSHD_OPT_DEP_FILE}
-	${ASM} ${ASM_INCLUDE_DIR} -f elf -o $@ $<
+	${ASM} ${ASM_INCLUDE_DIR} -f elf32 -o $@ $<
 
 
 # c语言
